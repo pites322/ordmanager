@@ -1,0 +1,182 @@
+html {
+    background: #F6F6CF
+}
+
+body {
+    font-family: Ariel, sans-serif;
+    padding: 0;
+    margin: 0;
+}
+
+.navbar {
+    width: 91%;
+    margin: 0 auto;
+    background: #93CACA;
+    display: block;
+    padding: 40px 10px 40px 10px;
+}
+
+.navLog {
+    padding: 0;
+    margin: 0;
+    display: inline;
+}
+
+.navLog li {
+    float: left;
+    display: block;
+    padding-left: 30px;
+    display: inline;
+}
+
+.navLog li a {
+    color: black;
+    text-decoration: none;
+}
+
+.updateform{
+    display: None;
+}
+
+.allBlock {
+    height: 800px;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.staffAll{
+    overflow: scroll;
+    width: 100%;
+    height: 74%;
+    border: 1px solid black;
+}
+
+.person {
+    position:relative;
+    border: 4px double black;
+    float: left;
+    width: 30%;
+    height: 100%;
+    background: white;
+}
+
+.persTableName {
+    width: 100%;
+    height: 5%;
+    border: 1px solid black;
+}
+
+.staffTable {
+    width: 100%;
+    font-size: 14px;
+}
+
+.orderPlace {
+    position: relative;
+    border: 4px double black;
+    float: left;
+    width: 30%;
+    height: 100%;
+    background: white;
+}
+.orderAllStaff{
+    height: 79%;
+    width: 100%;
+    overflow: scroll;
+}
+
+.orderTable {
+    display: None;
+    font-size: 14px;
+}
+
+.orderTableRaw{
+    border: 4px double black;
+    width: 100%;
+}
+
+.orderNameProd{
+    width: 50%;
+}
+
+.orderPriceProd{
+    width: 15%;
+}
+
+.amount {
+    width: 30px;
+}
+
+.productsPlace {
+    position:relative;
+    border: 4px double black;
+    float: left;
+    width: 38%;
+    height: 100%;
+    background: white;
+}
+
+.searchPlace{
+    border: 1px solid black;
+    width: 100%;
+    height: 5%;
+}
+
+.searchBar {
+    float: right;
+    padding: 7px 10px 5px 10px;
+}
+
+.searchForm {
+    display: inline;
+}
+
+.prodCategory {
+    border: 1px solid black;
+    width: 100%;
+    height: 27%;
+    overflow: scroll;
+}
+
+
+.prodGroups {
+    display: None;
+    width: 100%;
+}
+
+.prodElements{
+    border: 1px solid black;
+    width: 100%;
+    height: 47%;
+    overflow: scroll;
+}
+
+.products {
+    width: 80%;
+}
+
+.formToAdd {
+    display: None
+}
+
+.prodButtons{
+    border: 1px solid black;
+    width: 100%;
+    height: 20%;
+    background: #A5AEAC;
+}
+
+.persButtons, .ordButtons{
+    border: 1px solid black;
+    width: 100%;
+    height: 20%;
+    background: #A5AEAC;
+    position:absolute;
+    bottom: 0px;
+}
+
+#navData {
+    float: right;
+    padding-right: 30px;
+    display: inline;
+}

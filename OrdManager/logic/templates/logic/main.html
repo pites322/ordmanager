@@ -1,0 +1,275 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Title</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="{% static 'logic/js/main.js'%}"></script>
+    <link rel="stylesheet" href="{% static 'logic/css/main.css'%}">
+</head>
+<body>
+    <div class="navbar">
+    {% if user.is_authenticated %}
+        <ul class="navLog">
+            <li>
+                <a href="{% url 'logout' %}" >Logout</a>
+            </li>
+            <li>
+                <div>{{ user.username }}</div>
+            </li>
+        </ul>
+    {% elif not user.is_authenticated %}
+        <a href="{% url 'login' %}" >Login</a>
+    {% endif %}
+        <div id="navData">{{ date }}</div>
+    </div>
+    <br>
+    <div class="allBlock">
+        <div class="person">
+            <div class="persTableName">Персоны</div>
+                <div id="staff" class="staffAll">
+                <table class="staffTable">
+                <tr>
+                    <td></td>
+                    <td>Имя, фамилия или псевдоним</td>
+                    <td>Сумма заказа</td>
+                    <td>статус</td>
+                </tr>
+                {% for elem in staff %}
+                <tr id="element{{elem.pk}}">
+                    <td><button class="updatestaff" data-pk="{{elem.pk}}">Изм</button></td>
+                    <td class="staff" id="{{elem.pk}}" data-pk="{{elem.pk}}" >{{ elem }}</td>
+                    <td> price </td>
+                    <td> stat </td>
+                    </tr>
+                    <div class="updateform" id="updateform{{elem.pk}}">
+                        <form class="inputNewNameData" action="none">
+                            <fieldset>
+                                <input id="surname{{elem.pk}}"  name="Фамилия" value="{{elem.surname}}" required>
+                                <input id="name{{elem.pk}}" name="Имя" value="{{elem.first_name}}" required>
+                                <input id="secondname{{elem.pk}}" name="Отчество" value="{{elem.second_name}}" required>
+                            </fieldset>
+                            <fieldset id="actions">
+                                <input class="saveNewNameData" type="submit" value="Сохранить" onclick="return false" data-pk="{{elem.pk}}">
+                            </fieldset>
+                        </form>
+                    </div>
+                    {% endfor %}
+                    </table>
+                 </div>
+            <div class="persButtons">
+                {% if user.is_authenticated %}
+                <button class="addNewEmployee">Добавить</button>
+                    <form method="post" class="formToAdd">
+                    <fieldset>
+                        {% csrf_token %}
+                            {{ form }}
+                            <input type="submit" class="btn btn-primary" value="Save">
+                    </fieldset>
+                </form>
+                <button class="dellstaff">Удл</button>
+                {% endif %}
+            </div>
+        </div>
+        <div class="orderPlace">
+            <div class="orderAllStaff">
+                {% for elem in staff %}
+                    <table class="orderTable" id="ord{{elem.pk}}">
+                        <tr class="orderTableRaw">
+                            <td class="orderNameProd">Наименование блюда</td>
+                            <td>Кол-во</td>
+                            <td class="orderPriceProd">Цена</td>
+                            <td>Статус</td>
+                            <td></td>
+                        </tr>
+                        {% for ord in orders %}
+                            {% if elem.id == ord.buyer_id %}
+                                <tr id="order{{ord.pk}}" class="orderTableRaw">
+                                    <td class="orderNameProd">{{ord.name_of_buy}}</td>
+                                    <td><input class="amount" data-pk="{{ord.pk}}" value="{{ord.amount}}"></td>
+                                    <td class="orderPriceProd">{{ord.price_of_buy}}</td>
+                                    <td class="status">{{ord.get_status_display}}</td>
+                                    <td><button class="deleteOrder" data-pk="{{ord.pk}}">Удал</button></td>
+                                </tr>
+                            {% endif %}
+                        {% endfor %}
+                    </table>
+                {% endfor %}
+            </div>
+            <div class="ordButtons">
+                {% if user.is_authenticated %}
+                    <button class="confirm" data-user="{{user.id}}">Подтвердить Заказ</button>
+                    <button class="dellbyperson">Очистить по персоне</button>
+                    <button class="dellall" data-user="{{user.id}}">Очистить все</button>
+                {% endif %}
+            </div>
+        </div>
+        <div class="productsPlace">
+            <div class="searchPlace">
+                <div class="searchBar">
+                    <form method="get" class="searchForm">
+                        <input  name="search" type="search" placeholder="Search" aria-label="Search">
+                        <button type="submit">Поиск</button>
+                    </form>
+                    <form method="get" class="searchForm">
+                        <button>Сброс</button>
+                    </form>
+                </div>
+            </div>
+            <div class="prodCategory">
+                {% for elem, num in groups.items %}
+                    <div class="groupProd" data-group='{{num}}'>{{ elem }}</div>
+                {% endfor %}
+            </div>
+            <div class="prodElements">
+                    <table id="group16" class="prodGroups">
+                        <tr class="prodGroupsRaw">
+                            <td class="products">Название</td>
+                            <td>Нетто(гр/мл)</td>
+                            <td>Цена</td>
+                        </tr>
+                        {% for elem in group16 %}
+                        <tr class="prodGroupsRaw">
+                            <td class="products" id="buy{{elem.0}}" data-buyid="{{elem.0}}" data-buyname="{{elem.2}}" data-buyprice="{{elem.3}}">{{ elem.2 }}</td>
+                            <td>{{ elem.6 }}</td>
+                            <td>{{ elem.3 }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    <table id="group17" class="prodGroups">
+                        <tr>
+                            <td>Название</td>
+                            <td>Нетто(гр/мл)</td>
+                            <td>Цена</td>
+                        </tr>
+                        {% for elem in group17 %}
+                        <tr>
+                            <td class="products" id="buy{{elem.0}}" data-buyid="{{elem.0}}" data-buyname="{{elem.2}}" data-buyprice="{{elem.3}}">{{ elem.2 }}</td>
+                            <td>{{ elem.6 }}</td>
+                            <td>{{ elem.3 }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                     <table id="group20" class="prodGroups">
+                        <tr>
+                            <td>Название</td>
+                            <td>Нетто(гр/мл)</td>
+                            <td>Цена</td>
+                        </tr>
+                        {% for elem in group20 %}
+                         <tr>
+                            <td class="products" id="buy{{elem.0}}" data-buyid="{{elem.0}}" data-buyname="{{elem.2}}" data-buyprice="{{elem.3}}">{{ elem.2 }}</td>
+                            <td>{{ elem.6 }}</td>
+                            <td>{{ elem.3 }}</td>
+                         </tr>
+                        {% endfor %}
+                    </table>
+                    <table id="group21" class="prodGroups">
+                        <tr>
+                            <td>Название</td>
+                            <td>Нетто(гр/мл)</td>
+                            <td>Цена</td>
+                        </tr>
+                        {% for elem in group21 %}
+                        <tr>
+                            <td class="products" id="buy{{elem.0}}" data-buyid="{{elem.0}}" data-buyname="{{elem.2}}" data-buyprice="{{elem.3}}">{{ elem.2 }}</td>
+                            <td>{{ elem.6 }}</td>
+                            <td>{{ elem.3 }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    <table id="group22" class="prodGroups">
+                        <tr>
+                            <td>Название</td>
+                            <td>Нетто(гр/мл)</td>
+                            <td>Цена</td>
+                        </tr>
+                        {% for elem in group22 %}
+                        <tr>
+                            <td class="products" id="buy{{elem.0}}" data-buyid="{{elem.0}}" data-buyname="{{elem.2}}" data-buyprice="{{elem.3}}">{{ elem.2 }}</td>
+                            <td>{{ elem.6 }}</td>
+                            <td>{{ elem.3 }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    <table id="group23" class="prodGroups">
+                        <tr>
+                            <td>Название</td>
+                            <td>Нетто(гр/мл)</td>
+                            <td>Цена</td>
+                        </tr>
+                        {% for elem in group23 %}
+                        <tr>
+                            <td class="products" id="buy{{elem.0}}" data-buyid="{{elem.0}}" data-buyname="{{elem.2}}" data-buyprice="{{elem.3}}">{{ elem.2 }}</td>
+                            <td>{{ elem.6 }}</td>
+                            <td>{{ elem.3 }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    <table id="group24" class="prodGroups">
+                        <tr>
+                            <td>Название</td>
+                            <td>Нетто(гр/мл)</td>
+                            <td>Цена</td>
+                        </tr>
+                        {% for elem in group24 %}
+                        <tr>
+                            <td class="products" id="buy{{elem.0}}" data-buyid="{{elem.0}}" data-buyname="{{elem.2}}" data-buyprice="{{elem.3}}">{{ elem.2 }}</td>
+                            <td>{{ elem.6 }}</td>
+                            <td>{{ elem.3 }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    <table id="group25" class="prodGroups">
+                        <tr>
+                            <td>Название</td>
+                            <td>Нетто(гр/мл)</td>
+                            <td>Цена</td>
+                        </tr>
+                        {% for elem in group25 %}
+                        <tr>
+                            <td class="products" id="buy{{elem.0}}" data-buyid="{{elem.0}}" data-buyname="{{elem.2}}" data-buyprice="{{elem.3}}">{{ elem.2 }}</td>
+                            <td>{{ elem.6 }}</td>
+                            <td>{{ elem.3 }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    <table id="group28" class="prodGroups">
+                        <tr>
+                            <td>Название</td>
+                            <td>Нетто(гр/мл)</td>
+                            <td>Цена</td>
+                        </tr>
+                        {% for elem in group28 %}
+                        <tr>
+                            <td class="products" id="buy{{elem.0}}" data-buyid="{{elem.0}}" data-buyname="{{elem.2}}" data-buyprice="{{elem.3}}">{{ elem.2 }}</td>
+                            <td>{{ elem.6 }}</td>
+                            <td>{{ elem.3 }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                    <table id="group39" class="prodGroups">
+                        <tr>
+                            <td>Название</td>
+                            <td>Нетто(гр/мл)</td>
+                            <td>Цена</td>
+                        </tr>
+                        {% for elem in group39 %}
+                        <tr>
+                            <td class="products" id="buy{{elem.0}}" data-buyid="{{elem.0}}" data-buyname="{{elem.2}}" data-buyprice="{{elem.3}}">{{ elem.2 }}</td>
+                            <td>{{ elem.6 }}</td>
+                            <td>{{ elem.3 }}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+            </div>
+            <div class="prodButtons">
+               {% if user.is_authenticated %}
+                  <button class="add">Добавить в корзину</button>
+               {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>
